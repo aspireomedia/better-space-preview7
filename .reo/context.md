@@ -1,0 +1,1 @@
+Implementation state: new Next.js 16 App Router project created. Brand is Better Space, not Rumaio. Design source of truth is `design.md`. Figma Community source did not expose a standard design file key through available MCP; screenshot is implementation fidelity target. Pending: UI implementation, local visual QA, repository/deployment/domain.
