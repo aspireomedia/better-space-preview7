@@ -45,6 +45,9 @@ Remote imagery uses optimized `next/image` with permitted Unsplash hosts. Semant
 ## Integrations and deployment
 GitHub repository and a new Vercel project deploy the `main` branch. Production domain: `https://preview7.aspireomedia.com`. Figma Community design is used structurally where MCP permits; supplied Better Space screenshot remains visual priority. No Figma URLs ship in runtime source.
 
+## Homepage merchandising (cross-preview rule)
+The homepage does not render a raw catalogue grid: it uses curated ID lists (`weeklyOfferIds`, `dailyDetailIds` in `app/page.tsx`), so catalogue growth cannot silently lengthen it. Keep it that way. Every cap and ordering rule here is a **placeholder** — no sales/popularity data exists yet — so when the catalogue or traffic data matures, the selection rule needs revisiting rather than the list simply growing. Never introduce a filter tab that renders uncapped results, and never map the shared catalogue to a homepage grid without an explicit limit. Applies to preview5/preview6 too; detail in `/home/ubuntu/aspireomedia/furniture-catalog/design.md` and obsidian-vault/Aspireomedia/Furniture-Preview-Merchandising.md.
+
 ## Exclusions
 No real inventory, checkout, payment processing, customer accounts, supplier CRM, or brand partnership claims.
 
