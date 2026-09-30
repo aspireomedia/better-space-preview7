@@ -8,6 +8,15 @@
 - Palette/tokens unchanged from existing Preview 7 design system (`--brand-slate`, `--brand-dusty`, `--brand-ice`, serif display type) — extended, not replaced, per continuity requirement ("use existing Preview 7 homepage as base").
 - Products are fully linked: homepage → category → product detail → related products (same room) → cart, with breadcrumbs on every subpage.
 
+## Catalogue reseed with EDI's dataset (2026-09-30)
+- Replaced the 24-item hand-authored catalogue with EDI's 100-product furniture dataset (`furniture-catalog/out/preview7-products.ts`): 17 product categories, 6 rooms (unchanged room slugs), real distinct Pexels photos per product — zero duplicate images verified programmatically before and after seeding.
+- `next.config.ts` now whitelists both `images.unsplash.com` (existing homepage/category imagery) and `images.pexels.com` (new product photos).
+- Updated hardcoded featured-product IDs in `app/page.tsx` (`weeklyOfferIds`, `dailyDetailIds`) to real IDs from the new catalogue, spread across categories — the old IDs (`luna-sofa`, `nara-armchair`, etc.) no longer existed post-reseed and would have silently rendered nothing.
+- Fixed a pre-existing `react-hooks/set-state-in-effect` lint error in `useStore()` (`app/components/store.tsx`) by deferring the localStorage-driven `setState` calls into a `queueMicrotask` callback.
+- Found and fixed a real SSR/client hydration mismatch on `/cart`: adding an item then visiting `/cart` produced a React hydration error because the server always renders an empty cart while the client immediately reflects real localStorage state. Added a `hydrated` flag to `useStore()` and an explicit loading placeholder in `CartPage` until hydration completes — verified with a real add-to-cart-then-view-cart Playwright flow, zero console errors after the fix.
+- `relatedProducts()` logic (category-first, room-fallback) was untouched and re-verified against the new 100-item catalogue across 6 categories including "Meja Samping" which deliberately spans two rooms — all correct.
+- Full QA: `npm run lint` 0 errors, `npm run build` clean, all 100 product images load with zero broken images/zero failed network requests across all 6 room collection pages, 0 console errors, 0 overflow desktop/mobile, production verified live at `https://preview7.aspireomedia.com`.
+
 ## Related-products category fix (2026-09-30)
 - **Bug found and fixed:** `relatedProducts()` originally filtered by `room` (e.g. "Ruang Tamu"), not `category` — a sofa PDP could recommend a coffee table or lounge chair since all three share the living-room. J Kal flagged this explicitly.
 - Fix: `relatedProducts()` now filters by `category` first (sofa → sofa, meja kerja → meja kerja), falling back to same-room only if a category genuinely has zero other members.
@@ -37,5 +46,5 @@
 
 ## Known follow-ups
 - Mobile menu dialog is not yet Escape-closable (close button only) — minor a11y gap to close in a future pass.
-- Repo rename: confirm the very next push still auto-deploys on Vercel (metadata says it should, but hasn't been proven with a live push since the rename).
+- Repo rename: confirmed — the post-reseed push (`bea0d64`) auto-deployed on Vercel without any manual re-link, closing this item.
 - Full-page vision QA (mobile home, desktop cart) was blocked earlier by a transient 429 on the vision backend — worth a re-run to catch any subtler visual regressions the automated checks can't see.
