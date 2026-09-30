@@ -12,15 +12,13 @@ type StoreShellProps = { children: ReactNode; cart: CartLine[]; onAdd: (id: stri
 export function useStore() {
   const [cart, setCart] = useState<CartLine[]>([]);
   const [favorites, setFavorites] = useState<string[]>([]);
-  useEffect(() => {
-    setCart(JSON.parse(localStorage.getItem("better-space-cart") || "[]"));
-    setFavorites(JSON.parse(localStorage.getItem("better-space-favorites") || "[]"));
-  }, []);
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => { queueMicrotask(() => { try { setCart(JSON.parse(localStorage.getItem("better-space-cart") || "[]")); setFavorites(JSON.parse(localStorage.getItem("better-space-favorites") || "[]")); } catch {} setHydrated(true); }); }, []);
   const updateCart = (next: CartLine[]) => { setCart(next); localStorage.setItem("better-space-cart", JSON.stringify(next)); };
   const add = (id: string) => updateCart(cart.some((line) => line.id === id) ? cart.map((line) => line.id === id ? { ...line, quantity: line.quantity + 1 } : line) : [...cart, { id, quantity: 1 }]);
   const changeQuantity = (id: string, quantity: number) => updateCart(quantity < 1 ? cart.filter((line) => line.id !== id) : cart.map((line) => line.id === id ? { ...line, quantity } : line));
   const favorite = (id: string) => { const next = favorites.includes(id) ? favorites.filter((item) => item !== id) : [...favorites, id]; setFavorites(next); localStorage.setItem("better-space-favorites", JSON.stringify(next)); };
-  return { cart, favorites, add, changeQuantity, favorite };
+  return { cart, favorites, add, changeQuantity, favorite, hydrated };
 }
 
 export function StoreShell({ children, cart, favorites, onAdd, onFavorite }: StoreShellProps) {

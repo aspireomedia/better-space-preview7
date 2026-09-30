@@ -12,8 +12,8 @@ const heroImages = [
   "https://images.unsplash.com/photo-1618220179428-22790b461013?auto=format&fit=crop&w=1800&q=90",
 ];
 
-const weeklyOfferIds = ["luna-sofa", "nara-armchair", "riko-coffee-table", "evora-bed", "arka-dining"];
-const dailyDetailIds = ["nexis-chair", "kana-cabinet", "hana-bookcase", "arli-lamp"];
+const weeklyOfferIds = ["sofa-luna-3s", "armchair-kirana-wing", "coffee-table-riko-round", "bed-frame-evora-queen", "dining-table-arka-4seat"];
+const dailyDetailIds = ["office-chair-giri-mesh-midback", "cabinet-kana-low", "bookshelf-hana-4tier", "table-lamp-arli-ceramic"];
 
 export default function Home() {
   const store = useStore();
